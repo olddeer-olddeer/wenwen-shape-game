@@ -18,14 +18,17 @@ jobs:
       - name: Build APK
         run: |
           set -o pipefail
-          echo "=== Building APK ==="
-          buildozer android debug 2>&1 | tee build.log
-          BUILD_EXIT=${PIPESTATUS[0]}
+          echo "=== Building APK (output saved to build.log) ==="
+          buildozer android debug > build.log 2>&1
+          BUILD_EXIT=$?
           echo "=== Build exit code: $BUILD_EXIT ==="
+          echo ""
           echo "=== Last 80 lines of build log ==="
           tail -80 build.log
+          echo ""
           echo "=== Looking for APK files ==="
-          find . -name "*.apk" -type f 2>/dev/null
+          find . -name "*.apk" -type f 2>/dev/null || echo "No APK found"
+          echo ""
           echo "=== Contents of bin/ ==="
           ls -la bin/ 2>/dev/null || echo "No bin directory"
           exit $BUILD_EXIT
