@@ -17,17 +17,22 @@ jobs:
 
       - name: Build APK
         run: |
+          set -o pipefail
           echo "=== Building APK ==="
-          buildozer android debug 2>&1 | tail -100
-          echo "=== Build exit code: $? ==="
-          echo "=== Files in bin/ ==="
+          buildozer android debug 2>&1 | tee build.log
+          BUILD_EXIT=${PIPESTATUS[0]}
+          echo "=== Build exit code: $BUILD_EXIT ==="
+          echo "=== Last 80 lines of build log ==="
+          tail -80 build.log
+          echo "=== Looking for APK files ==="
+          find . -name "*.apk" -type f 2>/dev/null
+          echo "=== Contents of bin/ ==="
           ls -la bin/ 2>/dev/null || echo "No bin directory"
-          echo "=== All files in workspace ==="
-          find . -name "*.apk" 2>/dev/null || echo "No APK found"
+          exit $BUILD_EXIT
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: wenwen-apk
-          path: bin/*.apk
+          path: "**/*.apk"
