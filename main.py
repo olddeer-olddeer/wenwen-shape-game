@@ -27,6 +27,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.graphics import Color, Ellipse, Line, Rectangle
 from kivy.core.image import Image as CoreImage
+from kivy.resources import resource_find
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
@@ -74,14 +75,15 @@ class GameWidget(Widget):
     def load_random_background(self):
         """随机加载冰淇淋背景"""
         self.bg_texture = None
-        image_path = random.choice(self.BACKGROUND_IMAGES)
+        image_name = random.choice(self.BACKGROUND_IMAGES)
         try:
-            if os.path.exists(image_path):
+            image_path = resource_find(image_name)
+            if image_path:
                 self.bg_texture = CoreImage(image_path).texture
             else:
-                print(f"警告：找不到背景图片 {image_path}，使用默认背景")
+                print(f"警告：找不到背景图片 {image_name}，使用默认背景")
         except Exception as e:
-            print(f"警告：背景图片加载失败 {image_path}，错误：{e}")
+            print(f"警告：背景图片加载失败 {image_name}，错误：{e}")
             self.bg_texture = None
 
     # ---------- 关卡初始化 ----------
