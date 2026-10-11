@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: kivy/buildozer:latest
-      options: --user root
 
     steps:
       - name: Checkout code
@@ -18,7 +17,7 @@ jobs:
 
       - name: Build APK
         run: |
-          yes | buildozer android debug
+          echo "y" | buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
