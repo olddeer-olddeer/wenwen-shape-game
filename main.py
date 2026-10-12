@@ -41,7 +41,7 @@ SHAPE_TYPES = 5
 class GameWidget(Widget):
     """游戏主控件：负责图形生成、绘制、触摸交互、随机游动"""
 
-    SHAPE_SIZE = 60          # 图形尺寸
+    SHAPE_SIZE = 60          # 图形尺寸（会根据屏幕自适应）
     TOUCH_RADIUS = 60        # 触摸选中半径
     MATCH_THRESHOLD = 80     # 匹配判定距离
     MAX_PAIRS = SHAPE_TYPES  # 最大对数（等于图形类型数，保证不重复）
@@ -70,6 +70,10 @@ class GameWidget(Widget):
     def _on_size(self, *args):
         if not self._initialized and self.width > 0 and self.height > 0:
             self._initialized = True
+            # 根据屏幕宽度自适应图形大小（约屏幕宽度的 1/7）
+            self.SHAPE_SIZE = max(50, self.width / 7)
+            self.TOUCH_RADIUS = self.SHAPE_SIZE
+            self.MATCH_THRESHOLD = self.SHAPE_SIZE * 1.3
             self.next_level()
 
     def load_random_background(self):
