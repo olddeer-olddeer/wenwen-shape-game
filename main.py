@@ -51,9 +51,9 @@ class GameWidget(Widget):
     FPS = 20                 # 游动刷新率
 
     BACKGROUND_IMAGES = [
-        "冰淇淋1.jpeg",
-        "冰淇淋2.jpeg",
-        "冰淇淋3.jpeg",
+        "bg1.jpg",
+        "bg2.jpg",
+        "bg3.jpg",
     ]
 
     def __init__(self, **kwargs):
